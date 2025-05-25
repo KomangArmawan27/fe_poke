@@ -7,9 +7,21 @@
       <div 
         v-for="pokemon in pokemons"
         :key="pokemon.name"
-        class="bg-white hover:bg-gray-100 transition transform active:scale-95 duration-150 ease-in-out cursor-pointer rounded shadow-lg ">
+        class="bg-white hover:bg-gray-100 transition transform active:scale-95 duration-150 ease-in-out cursor-pointer rounded shadow-lg h-80">
         <router-link to="/pokemon-add" class="h-full flex flex-col items-center justify-center py-2">
-            <img :src="pokemon.image || 'https://cdn-icons-png.flaticon.com/512/419/419467.png'" :alt="pokemon.name" class="w-full h-3/4 object-contain" />
+            <img 
+                v-show="!pokemon.isImageLoading"
+                :src="pokemon.image || 'https://cdn-icons-png.flaticon.com/512/419/419467.png'" 
+                :alt="pokemon.name" 
+                class="w-full h-3/4 object-contain"
+                @load="pokemon.isImageLoading = false"
+                @error="pokemon.isImageLoading = false" />
+
+            <!-- Placeholder while loading -->
+            <div v-show="pokemon.isImageLoading" class="w-full h-3/4 flex items-center justify-center bg-gray-100 animate-pulse">
+                <img src="https://cdn-icons-png.flaticon.com/512/188/188987.png" alt="Loading..." class="w-12 h-12 opacity-50" />
+            </div>
+
             <p class="text-center mt-2 capitalize">{{ pokemon.name }}</p>
             <div class="flex gap-1 flex-wrap justify-center items-center mt-1 px-2">
                 <span v-for="type in pokemon.types" :key="type" class="px-2 py-0.5 rounded-full text-xs text-white capitalize" :class="typeColorClass(type)" >

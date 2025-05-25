@@ -22,6 +22,7 @@ export async function fetchPokemonList(limit = 20, offset = 0) {
           name: pokemon.name,
           image: res.data.sprites.other['official-artwork'].front_default,
           types: types,
+          isImageLoading: true
         }
       })
     )
