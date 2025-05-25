@@ -8,7 +8,9 @@
         v-for="pokemon in pokemons"
         :key="pokemon.name"
         class="bg-white hover:bg-gray-100 transition transform active:scale-95 duration-150 ease-in-out cursor-pointer rounded shadow-lg h-80">
-        <router-link to="/pokemon-add" class="h-full flex flex-col items-center justify-center py-2">
+        <router-link 
+            :to="{ name: 'AddPokemon', query: { name: pokemon.name, image: pokemon.image, types: pokemon.types } }"
+            class="h-full flex flex-col items-center justify-center py-2">
             <img 
                 v-show="!pokemon.isImageLoading"
                 :src="pokemon.image || 'https://cdn-icons-png.flaticon.com/512/419/419467.png'" 

@@ -18,7 +18,7 @@
           <router-link
             to="/pokemon-list"
             class="block p-2 rounded hover:bg-gray-200"
-            :class="{ 'bg-gray-300 font-semibold': $route.path === '/pokemon-list' }"
+            :class="{ 'bg-gray-300 font-semibold': ['/pokemon-list', '/pokemon-add'].includes($route.path) }"
           >
             Pokemon
           </router-link>
