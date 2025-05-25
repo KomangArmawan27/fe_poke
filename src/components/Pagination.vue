@@ -55,7 +55,7 @@ const pagesToShow = computed(() => {
     } else if (current === 5) {
       pages.push(1, '...', 4, 5, 6, '...', total)
     } else if (current >= total - 2) {
-      pages.push(1, '...', total - 3, total - 2, total - 1, total)
+      pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total)
     } else {
       pages.push(1, '...', current - 1, current, current + 1, '...', total)
     }
