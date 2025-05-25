@@ -41,7 +41,15 @@
 
     <!-- Submit Button -->
     <div class="flex flex-row gap-2">
-      <button
+      <button 
+        v-if="props.mode === 'create'"
+        type="submit"
+        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-200" >
+        Save Pokémon
+      </button>
+      
+      <button 
+        v-if="props.mode === 'update'"
         type="submit"
         class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-200" >
         Save Updates
