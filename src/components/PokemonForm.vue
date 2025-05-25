@@ -40,24 +40,41 @@
     </div>
 
     <!-- Submit Button -->
-    <div>
+    <div class="flex flex-row gap-2">
       <button
         type="submit"
         class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-200" >
-        Save Pokémon
+        Save Updates
+      </button>
+
+      <button
+        v-if="props.mode === 'update'"
+        type="button"
+        class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md transition duration-200"
+        @click="handleDelete">
+        Delete Pokémon
       </button>
     </div>
+
   </form>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
-import { createFavoritePokemon } from '../services/pokemonFavorite'
+import { useRouter } from 'vue-router'
+import { ref, defineProps, watch } from 'vue'
+import { createFavoritePokemon, updateFavoritePokemon, deleteFavoritePokemon } from '../services/pokemonFavorite'
+
+const router = useRouter()
+
 
 const props = defineProps({
   name: String,
   type: Array,
   sprite: String,
+  notes: {
+    type: String,
+    default: ''
+  },
   mode: {
     type: String,
     default: 'create'
@@ -71,8 +88,14 @@ const props = defineProps({
 
 const name = ref(props.name)
 const type = ref(props.type)
-const notes = ref('')
+const notes = ref(props.notes)
 const sprite = ref(props.sprite)
+
+// Sync with prop updates
+watch(() => props.notes, (newVal) => {
+  notes.value = newVal || ''
+})
+
 
 const typeColorClass = (type) => {
   const colors = {
@@ -121,6 +144,17 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     alert('Failed to save Pokémon.')
+  }
+}
+
+const handleDelete = async () => {
+  const token = localStorage.getItem('token')
+  try {
+    await deleteFavoritePokemon(token, props.id)
+    alert('Pokémon deleted successfully!')
+    router.push('/')
+  } catch (error) {
+    alert('Failed to delete Pokémon.')
   }
 }
 </script>

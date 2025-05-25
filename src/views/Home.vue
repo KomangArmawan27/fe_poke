@@ -3,13 +3,13 @@
     <h2 class="text-2xl font-semibold mb-4">My Favorite Pokemon &gt;_&lt;</h2>
 
     <!-- Grid -->
-    <div class="p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div v-if="favoritePokemons.length > 0" class="p-4 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <div
         v-for="pokemon in favoritePokemons"
         :key="pokemon.ID"
         class="bg-white hover:bg-gray-100 transition transform active:scale-95 duration-150 ease-in-out cursor-pointer rounded shadow-lg h-80">
         <router-link 
-            :to="{ name: 'AddPokemon', query: { name: pokemon.name, image: pokemon.image, types: pokemon.types } }"
+            :to="{ name: 'UpdatePokemon', query: { ID: pokemon.ID, name: pokemon.name, image: pokemon.sprite, types: pokemon.type.split(', '), notes: pokemon.notes } }"
             class="h-full flex flex-col items-center justify-center py-2">
             <img 
                 :src="pokemon.sprite" 
@@ -26,10 +26,16 @@
       </div>
     </div>
 
+    <!-- Empty state message -->
+    <div v-else class="text-center text-gray-500 py-10">
+        <p class="text-lg">You haven’t added any favorite Pokémon yet 😢</p>
+    </div>
+
     <Pagination
-      :currentPage="currentPage"
-      :totalPages="totalPages"
-      @change="changePage"
+        v-if="favoritePokemons.length > 0"
+        :currentPage="currentPage"
+        :totalPages="totalPages"
+        @change="changePage"
     />
   </MainLayout>
 </template>

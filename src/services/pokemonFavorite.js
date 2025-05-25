@@ -4,8 +4,11 @@ const BASE_URL = 'https://gopoke-production.up.railway.app/api/v1'
 
 // get
 export async function fetchFavoritePokemons(token, page = 1, limit = 20) {
+  const userEmail = localStorage.getItem('user_email')
+  if (!userEmail) throw new Error('User email not found in localStorage')
+
   try {
-    const res = await fetch(`${BASE_URL}/pokemons?page=${page}&limit=${limit}`, {
+    const res = await fetch(`${BASE_URL}/pokemons?page=${page}&limit=${limit}&user_email=${encodeURIComponent(userEmail)}`, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
@@ -67,7 +70,7 @@ export async function updateFavoritePokemon(id, data) {
   if (!token) throw new Error('User is not authenticated')
 
   const response = await axios.put(
-    `${BASE_URL}/pokemon/update/${id}`,
+    `${BASE_URL}/pokemon/update?id=${id}`,
     data,
     {
       headers: {
@@ -79,4 +82,29 @@ export async function updateFavoritePokemon(id, data) {
   )
 
   return response.data
+}
+
+// delete
+export async function deleteFavoritePokemon(token, id) {
+  try {
+    const res = await fetch(`${BASE_URL}/pokemon/delete?id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+    })
+
+    const json = await res.json()
+
+    if (res.ok && json.success) {
+      return json.message || 'Deleted successfully'
+    } else {
+      throw new Error(json.message || 'Failed to delete Pokémon')
+    }
+  } catch (error) {
+    console.error('Error deleting Pokémon:', error)
+    throw error
+  }
 }
