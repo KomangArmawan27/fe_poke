@@ -8,6 +8,7 @@
       <PokemonForm
         :name="selectedPokemon.name"
         :type="selectedPokemon.type"
+        :sprite="selectedPokemon.image"
         @select-pokemon="handleSelectPokemon"  />
     </div>
   </MainLayout>

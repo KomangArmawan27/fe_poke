@@ -1,5 +1,5 @@
 <template>
-  <form class= "max-w-md w-full mx-auto space-y-4">
+  <form class= "max-w-md w-full mx-auto space-y-4" @submit.prevent="handleSubmit">
     <h2 class="text-2xl font-semibold text-gray-800">Favorite this Pokémon</h2>
 
     <!-- Name -->
@@ -52,15 +52,18 @@
 
 <script setup>
 import { ref, defineProps } from 'vue'
+import { createFavoritePokemon } from '../services/pokemonFavorite'
 
 const props = defineProps({
   name: String,
-  type: Array
+  type: Array,
+  sprite: String
 })
 
 const name = ref(props.name)
 const type = ref(props.type)
 const notes = ref('')
+const sprite = ref(props.sprite)
 
 const typeColorClass = (type) => {
   const colors = {
@@ -85,5 +88,24 @@ const typeColorClass = (type) => {
   }
 
   return colors[type] || 'bg-gray-300 text-black'
+}
+
+const handleSubmit = async () => {
+  const userEmail = localStorage.getItem('user_email')
+
+  try {
+    await createFavoritePokemon({
+      name: name.value,
+      notes: notes.value,
+      sprite: sprite.value,
+      type: type.value.join(', '),
+      userEmail
+    })
+
+    alert('Pokémon favorited successfully!')
+    notes.value = ''
+  } catch (error) {
+    alert('Failed to save Pokémon.')
+  }
 }
 </script>
