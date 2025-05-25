@@ -9,7 +9,7 @@
         :name="selectedPokemon.name"
         :type="selectedPokemon.type"
         :sprite="selectedPokemon.image"
-        @select-pokemon="handleSelectPokemon"  />
+        mode="create" />
     </div>
   </MainLayout>
 </template>
@@ -29,8 +29,5 @@ const selectedPokemon = ref({
 
 const placeholderImage = 'https://cdn.pixabay.com/photo/2021/12/26/17/31/pokemon-list-6895600_640.png'
 
-function handleSelectPokemon(pokemon) {
-  selectedPokemon.value = pokemon
-}
 </script>
 

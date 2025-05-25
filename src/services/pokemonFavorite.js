@@ -32,3 +32,23 @@ export async function createFavoritePokemon({ name, notes, sprite, type, userEma
     throw error
   }
 }
+
+// services/pokemonFavorite.js
+export async function updateFavoritePokemon(id, data) {
+  const token = localStorage.getItem('token')
+  if (!token) throw new Error('User is not authenticated')
+
+  const response = await axios.put(
+    `${BASE_URL}/pokemon/update/${id}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  return response.data
+}

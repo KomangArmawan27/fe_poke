@@ -57,8 +57,17 @@ import { createFavoritePokemon } from '../services/pokemonFavorite'
 const props = defineProps({
   name: String,
   type: Array,
-  sprite: String
+  sprite: String,
+  mode: {
+    type: String,
+    default: 'create'
+  },
+  id: {
+    type: Number,
+    default: null
+  }
 })
+
 
 const name = ref(props.name)
 const type = ref(props.type)
@@ -92,18 +101,24 @@ const typeColorClass = (type) => {
 
 const handleSubmit = async () => {
   const userEmail = localStorage.getItem('user_email')
+  
+  const payload = {
+    name: name.value,
+    notes: notes.value,
+    sprite: sprite.value,
+    type: type.value.join(', '),
+    userEmail
+  }
 
   try {
-    await createFavoritePokemon({
-      name: name.value,
-      notes: notes.value,
-      sprite: sprite.value,
-      type: type.value.join(', '),
-      userEmail
-    })
-
-    alert('Pokémon favorited successfully!')
-    notes.value = ''
+    if (props.mode === 'update' && props.id) {
+      await updateFavoritePokemon(props.id, payload)
+      alert('Pokémon updated successfully!')
+    } else {
+      await createFavoritePokemon(payload)
+      alert('Pokémon favorited successfully!')
+      notes.value = ''
+    }
   } catch (error) {
     alert('Failed to save Pokémon.')
   }
